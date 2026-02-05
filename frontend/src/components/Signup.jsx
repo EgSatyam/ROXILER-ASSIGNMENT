@@ -76,26 +76,30 @@ export default function Signup({ onSignup }){
       <form onSubmit={submit} className="space-y-3">
         <div>
           <label className="block text-sm mb-1">Name</label>
-          <input value={form.name} onChange={e=>{setForm({...form,name:e.target.value}); if(errors.name) setErrors({...errors, name: ''});}} required className="w-full border px-3 py-2 rounded" />
+          <input value={form.name} onChange={e=>{setForm({...form,name:e.target.value}); if(errors.name) setErrors({...errors, name: ''});}} placeholder="Min 20, Max 60 characters (e.g., John Michael Anderson Smith)" required className="w-full border px-3 py-2 rounded text-sm" />
+          <p className="text-xs text-gray-500 mt-1">Must be 20-60 characters {form.name.length > 0 && `(${form.name.length}/60)`}</p>
           {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
         <div>
           <label className="block text-sm mb-1">Email</label>
-          <input value={form.email} onChange={e=>{setForm({...form,email:e.target.value}); if(errors.email) setErrors({...errors, email: ''});}} required className="w-full border px-3 py-2 rounded" />
+          <input value={form.email} onChange={e=>{setForm({...form,email:e.target.value}); if(errors.email) setErrors({...errors, email: ''});}} placeholder="example@domain.com" required className="w-full border px-3 py-2 rounded text-sm" />
+          <p className="text-xs text-gray-500 mt-1">Must follow standard email format</p>
           {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
         </div>
         <div>
           <label className="block text-sm mb-1">Address</label>
-          <input value={form.address} onChange={e=>{setForm({...form,address:e.target.value}); if(errors.address) setErrors({...errors, address: ''});}} className="w-full border px-3 py-2 rounded" />
+          <input value={form.address} onChange={e=>{setForm({...form,address:e.target.value}); if(errors.address) setErrors({...errors, address: ''});}} placeholder="Max 400 characters (optional)" className="w-full border px-3 py-2 rounded text-sm" />
+          <p className="text-xs text-gray-500 mt-1">Max 400 characters {form.address.length > 0 && `(${form.address.length}/400)`}</p>
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>
         <div>
           <label className="block text-sm mb-1">Password</label>
-          <input type="password" value={form.password} onChange={e=>{setForm({...form,password:e.target.value}); if(errors.password) setErrors({...errors, password: ''});}} required className="w-full border px-3 py-2 rounded" />
+          <input type="password" value={form.password} onChange={e=>{setForm({...form,password:e.target.value}); if(errors.password) setErrors({...errors, password: ''});}} placeholder="8-16 chars: 1 uppercase, 1 special (@!#$%^&*)" required className="w-full border px-3 py-2 rounded text-sm" />
+          <p className="text-xs text-gray-500 mt-1">8-16 characters, at least 1 uppercase letter & 1 special character {form.password.length > 0 && `(${form.password.length}/16)`}</p>
           {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
         </div>
         <div className="flex justify-end">
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Signup</button>
+          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Signup</button>
         </div>
       </form>
     </div>

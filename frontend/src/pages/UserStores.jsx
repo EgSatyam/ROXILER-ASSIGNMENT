@@ -3,16 +3,19 @@ import api from '../api';
 
 export default function UserStores(){
   const [stores, setStores] = useState([]);
-  const [q, setQ] = useState('');
-  const [addressQ, setAddressQ] = useState('');
+  const [storeFilters, setStoreFilters] = useState({ name: '', address: '' });
   const [rating, setRating] = useState({});
   const [submitted, setSubmitted] = useState({});
   const [errors, setErrors] = useState({});
+  
   const load = async () => {
-    const params = new URLSearchParams();
-    if (q) params.append('name', q);
-    if (addressQ) params.append('address', addressQ);
-    const res = await api.stores.list(params.toString() ? `?${params.toString()}` : '');
+    let queryString = '';
+    if (storeFilters.name) queryString += `name=${encodeURIComponent(storeFilters.name)}`;
+    if (storeFilters.address) {
+      if (queryString) queryString += '&';
+      queryString += `address=${encodeURIComponent(storeFilters.address)}`;
+    }
+    const res = await api.stores.list(queryString);
     setStores(res);
     // initialize rating with existing user ratings
     const initialRating = {};
@@ -25,6 +28,8 @@ export default function UserStores(){
     });
     setRating(initialRating);
     setSubmitted(initialSubmitted);
+    // Clear the filter fields after search
+    setStoreFilters({ name: '', address: '' });
   };
   useEffect(()=>{ load(); }, []);
   const validateRating = (val) => {
@@ -65,9 +70,9 @@ export default function UserStores(){
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-2xl font-semibold">Stores</h3>
         <div className="flex items-center gap-2">
-          <input placeholder="Search name" value={q} onChange={e=>setQ(e.target.value)} className="border px-3 py-2 rounded" />
-          <input placeholder="Search address" value={addressQ} onChange={e=>setAddressQ(e.target.value)} className="border px-3 py-2 rounded" />
-          <button onClick={()=>load()} className="bg-indigo-600 text-white px-3 py-2 rounded">Search</button>
+          <input placeholder="Search name" value={storeFilters.name} onChange={e=>setStoreFilters({...storeFilters,name:e.target.value})} className="border px-3 py-2 rounded" />
+          <input placeholder="Search address" value={storeFilters.address} onChange={e=>setStoreFilters({...storeFilters,address:e.target.value})} className="border px-3 py-2 rounded" />
+          <button onClick={()=>load()} className="bg-blue-600 text-white px-3 py-2 rounded">Search</button>
         </div>
       </div>
 

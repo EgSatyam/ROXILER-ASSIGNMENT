@@ -19,14 +19,16 @@ export default function Login({ onLogin }){
       <form onSubmit={submit} className="space-y-3">
         <div>
           <label className="block text-sm mb-1">Email</label>
-          <input value={email} onChange={e=>setEmail(e.target.value)} required className="w-full border px-3 py-2 rounded" />
+          <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="example@domain.com" required className="w-full border px-3 py-2 rounded" />
+          <p className="text-xs text-gray-500 mt-1">Must follow standard email format</p>
         </div>
         <div>
           <label className="block text-sm mb-1">Password</label>
-          <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required className="w-full border px-3 py-2 rounded" />
+          <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="8-16 chars: 1 uppercase, 1 special char (@!#$%^&*)" required className="w-full border px-3 py-2 rounded" />
+          <p className="text-xs text-gray-500 mt-1">8-16 characters, at least 1 uppercase letter & 1 special character</p>
         </div>
         <div className="flex justify-end">
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Login</button>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Login</button>
         </div>
       </form>
     </div>

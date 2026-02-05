@@ -17,12 +17,22 @@ function Protected({ children, role }){
 
 export default function App(){
   const [role, setRole] = useState(localStorage.getItem('role'));
+  const [showUserProfile, setShowUserProfile] = useState(false);
   const navigate = useNavigate();
   useEffect(()=>{
     const r = localStorage.getItem('role');
     setRole(r);
   },[]);
-  const logout = ()=>{ localStorage.removeItem('token'); localStorage.removeItem('role'); localStorage.removeItem('name'); setRole(null); navigate('/login'); };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (showUserProfile && e.target.closest('.user-profile-menu') === null) {
+        setShowUserProfile(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showUserProfile]);
+  const logout = ()=>{ localStorage.removeItem('token'); localStorage.removeItem('role'); localStorage.removeItem('name'); localStorage.removeItem('email'); setRole(null); navigate('/login'); };
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <header className="bg-blue-600 text-white shadow">
@@ -36,14 +46,41 @@ export default function App(){
             {!role && <Link to="/login" className="text-white hover:text-blue-200 hover:underline">Login</Link>}
             {!role && <Link to="/signup" className="text-white hover:text-blue-200 hover:underline">Signup</Link>}
             {role && <Link to="/update-password" className="text-white hover:text-blue-200 hover:underline">Update Password</Link>}
-            {role && <button onClick={logout} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Logout</button>}
+            {role && (
+              <div className="relative user-profile-menu">
+                <button onClick={() => setShowUserProfile(!showUserProfile)} className="flex items-center justify-center bg-white text-blue-600 rounded-full w-10 h-10 hover:bg-gray-100">
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                  </svg>
+                </button>
+                {showUserProfile && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg text-gray-900 z-50">
+                    <div className="p-4 border-b">
+                      <div className="text-sm font-semibold">Name</div>
+                      <div className="text-sm text-gray-700 break-words">{localStorage.getItem('name') || '-'}</div>
+                    </div>
+                    <div className="p-4 border-b">
+                      <div className="text-sm font-semibold">Email</div>
+                      <div className="text-sm text-gray-700 break-words">{localStorage.getItem('email') || '-'}</div>
+                    </div>
+                    <div className="p-4 border-b">
+                      <div className="text-sm font-semibold">Role</div>
+                      <div className="text-sm text-gray-700">{localStorage.getItem('role') || '-'}</div>
+                    </div>
+                    <div className="p-2">
+                      <button onClick={logout} className="w-full bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded text-sm">Logout</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
       <main className="max-w-4xl mx-auto p-6">
       <Routes>
-        <Route path="/login" element={<Login onLogin={(r)=>{ localStorage.setItem('token', r.token); localStorage.setItem('role', r.role); localStorage.setItem('name', r.name); setRole(r.role); navigate(r.role === 'ADMIN' ? '/admin' : r.role === 'STORE_OWNER' ? '/owner' : '/'); }} />} />
-        <Route path="/signup" element={<Signup onSignup={(r)=>{ localStorage.setItem('token', r.token); localStorage.setItem('role', r.role); localStorage.setItem('name', r.name); setRole(r.role); navigate(r.role === 'ADMIN' ? '/admin' : r.role === 'STORE_OWNER' ? '/owner' : '/'); }} />} />
+        <Route path="/login" element={<Login onLogin={(r)=>{ localStorage.setItem('token', r.token); localStorage.setItem('role', r.role); localStorage.setItem('name', r.name); localStorage.setItem('email', r.email); setRole(r.role); navigate(r.role === 'ADMIN' ? '/admin' : r.role === 'STORE_OWNER' ? '/owner' : '/'); }} />} />
+        <Route path="/signup" element={<Signup onSignup={(r)=>{ localStorage.setItem('token', r.token); localStorage.setItem('role', r.role); localStorage.setItem('name', r.name); localStorage.setItem('email', r.email); setRole(r.role); navigate(r.role === 'ADMIN' ? '/admin' : r.role === 'STORE_OWNER' ? '/owner' : '/'); }} />} />
         <Route path="/update-password" element={<Protected><UpdatePassword /></Protected>} />
         <Route path="/admin" element={<Protected role={'ADMIN'}><AdminDashboard /></Protected>} />
         <Route path="/owner" element={<Protected role={'STORE_OWNER'}><OwnerDashboard /></Protected>} />
