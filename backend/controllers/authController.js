@@ -19,7 +19,8 @@ exports.signup = async (req, res, next) => {
     if (exists) return res.status(409).json({ message: 'Email already used' });
     const hash = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, address, password_hash: hash, role: 'USER' });
-    return res.json({ id: user.id, email: user.email });
+    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
+    res.json({ token, role: user.role, name: user.name, email: user.email });
   } catch (err) { next(err); }
 };
 
@@ -38,7 +39,7 @@ exports.login = async (req, res, next) => {
   } catch (err) { next(err); }
 };
 
-exports.updatePasswordValidation = [body('oldPassword').isString().notEmpty(), body('newPassword').isLength({ min: 8, max: 16 }).matches(/[A-Z]/).matches(/[^A-Za-z0-9]/)];
+exports.updatePasswordValidation = [body('oldPassword').isString().notEmpty(), body('newPassword').isLength({ min: 8, max: 16 }).matches(/[A-Z]/).withMessage('Password must contain uppercase').matches(/[^A-Za-z0-9]/).withMessage('Password must contain special char')];
 exports.updatePassword = async (req, res, next) => {
   try {
     const errors = validationResult(req);

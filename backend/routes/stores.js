@@ -7,8 +7,7 @@ const roles = require('../middlewares/roles');
 
 router.get('/', storeCtrl.listStores);
 
-// rating endpoints (user only)
-router.post('/:id/rating', jwtAuth, roles(['USER']), ratingCtrl.ratingValidation, ratingCtrl.submitRating);
-router.put('/:id/rating', jwtAuth, roles(['USER']), ratingCtrl.ratingValidation, ratingCtrl.updateRating);
+// rating endpoint (user only)
+router.put('/:id/rating', jwtAuth, roles(['USER']), ratingCtrl.ratingValidation, ratingCtrl.rateStore);
 
 module.exports = router;
