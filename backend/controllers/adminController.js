@@ -28,7 +28,7 @@ exports.createStoreValidation = [
   body('name').isString().notEmpty(),
   body('email').optional().isEmail(),
   body('address').optional().isLength({ max: 400 }),
-  body('owner_id').optional()
+  body('owner_id').notEmpty().withMessage('Store owner is required')
 ];
 
 exports.createStore = async (req, res, next) => {
@@ -37,18 +37,16 @@ exports.createStore = async (req, res, next) => {
     if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
     const { name, email, address, owner_id } = req.body;
     
-    // Validate owner_id if provided
-    if (owner_id) {
-      const owner = await User.findByPk(owner_id);
-      if (!owner) {
-        return res.status(400).json({ message: 'Invalid owner: User does not exist' });
-      }
-      if (owner.role !== 'STORE_OWNER') {
-        return res.status(400).json({ message: 'Invalid owner: User must be a Store Owner' });
-      }
+    // Validate owner_id
+    const owner = await User.findByPk(owner_id);
+    if (!owner) {
+      return res.status(400).json({ message: 'Invalid owner: User does not exist' });
+    }
+    if (owner.role !== 'STORE_OWNER') {
+      return res.status(400).json({ message: 'Invalid owner: User must be a Store Owner' });
     }
     
-    const store = await Store.create({ name, email, address, owner_id: owner_id || null });
+    const store = await Store.create({ name, email, address, owner_id });
     res.json(store);
   } catch (err) { next(err); }
 };
@@ -113,7 +111,7 @@ exports.userDetails = async (req, res, next) => {
       const stores = await Store.findAll({ where: { owner_id: user.id } });
       const storeRatings = await Promise.all(stores.map(async s => {
         const avg = await Rating.findAll({ where: { store_id: s.id }, attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avg']] });
-        return { storeId: s.id, name: s.name, average: parseFloat(avg[0].get('avg')) || null };
+        return { storeId: s.id, name: s.name, average_rating: parseFloat(avg[0].get('avg')) || null };
       }));
       result.stores = storeRatings;
     }

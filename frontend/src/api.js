@@ -1,4 +1,4 @@
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
+const API_URL =  import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 async function request(path, opts={}){
   const headers = opts.headers || {};
@@ -7,7 +7,13 @@ async function request(path, opts={}){
   headers['Content-Type'] = headers['Content-Type'] || 'application/json';
   const res = await fetch(`${API_URL}${path}`, { ...opts, headers });
   const data = await res.json().catch(()=>null);
-  if (!res.ok) throw { status: res.status, body: data };
+  if (!res.ok) {
+    if (res.status === 422 && data?.errors) {
+      const errorMessages = data.errors.map(err => err.msg || err.message).join(', ');
+      throw new Error(errorMessages);
+    }
+    throw new Error(data?.message || 'Something went wrong');
+  }
   return data;
 }
 
@@ -22,8 +28,9 @@ export const admin = {
   createUser: (p) => request('/admin/users', { method: 'POST', body: JSON.stringify(p) }),
   createStore: (p) => request('/admin/stores', { method: 'POST', body: JSON.stringify(p) }),
   listStores: (q='') => request('/admin/stores'+(q?('?'+q):'')),
-  listUsers: (q='') => request('/admin/users'+(q?('?'+q):''))
-};
+  listUsers: (q='') => request('/admin/users'+(q?('?'+q):'')),
+  listStoreOwners: () => request('/admin/store-owners'),
+  userDetails: (id) => request(`/admin/users/${id}`)};
 
 export const stores = {
   list: (q='') => request('/stores'+(q?('?'+q):'')),

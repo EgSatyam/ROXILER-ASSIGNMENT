@@ -14,7 +14,7 @@ exports.submitRating = async (req, res, next) => {
     if (!store) return res.status(404).json({ message: 'Store not found' });
     // ensure one rating per user per store
     const existing = await Rating.findOne({ where: { user_id: userId, store_id: storeId } });
-    if (existing) return res.status(409).json({ message: 'Rating already exists; update instead' });
+    if (existing) return res.status(409).json({ message: 'Rating submitted already, please update rating.' });
     const r = await Rating.create({ user_id: userId, store_id: storeId, rating });
     res.json(r);
   } catch (err) { next(err); }
