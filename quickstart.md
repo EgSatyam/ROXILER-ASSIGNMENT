@@ -27,7 +27,7 @@ Open **PowerShell** or **Command Prompt** and run:
 cd d:\roxilerAssignment
 
 # Create database and tables
-mysql -u root -p < .\sql\schema.sql
+Get-Content .\sql\schema.sql | mysql -u root -p
 ```
 
 When prompted, enter your MySQL password (leave blank if no password).
