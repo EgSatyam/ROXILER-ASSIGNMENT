@@ -1,159 +1,279 @@
-# Quickstart — Store Ratings App
+# Quick Start Guide - Store Ratings App
 
-This file shows the exact steps to run the project locally (database, backend, frontend) on Windows (PowerShell). Adjust for macOS/Linux if needed.
+Get the Store Ratings application up and running in **5 minutes**. Follow these steps in order.
 
 ---
 
-## 1) Prerequisites
+## Prerequisites (Check First)
 
-- Node.js 16+ installed
-- MySQL server running and accessible
-- Git (optional)
+Before starting, ensure you have:
+- **Node.js 16+** → Check: `node --version`
+- **npm 7+** → Check: `npm --version`
+- **MySQL Server** running → Check by opening MySQL client
+- Workspace open at: `d:/roxilerAssignment`
 
-## 2) Clone / Open workspace
+If any are missing, install them before proceeding.
 
-Open the workspace at `d:/roxilerAssignment` (this repository).
+---
 
-## 3) Create the database schema
+## Step 1: Create Database (First Time Only)
 
-You can either let the backend `sequelize.sync()` create tables, or run the provided SQL directly.
+**⚠️ Do this ONLY ONCE when starting for the first time!**
 
-From PowerShell (example):
+Open **PowerShell** or **Command Prompt** and run:
 
 ```powershell
-# Import SQL (adjust user/password as needed)
+# Navigate to project root
+cd d:\roxilerAssignment
+
+# Create database and tables
 mysql -u root -p < .\sql\schema.sql
 ```
 
-Alternatively, run the SQL file content from your MySQL client.
+When prompted, enter your MySQL password (leave blank if no password).
 
-## 4) Backend setup
+**You should see:** Database created or tables exist message. No errors = Success! ✅
 
-1. Open a PowerShell terminal and go to the backend folder:
+**If you prefer manual MySQL client:**
+1. Open MySQL Workbench or MySQL CLI
+2. Run the SQL content from `sql/schema.sql`
+3. Confirm 3 tables exist: `users`, `stores`, `ratings`
+
+---
+
+## Step 2: Setup Backend
+
+**Terminal 1 (Keep running during development)**
 
 ```powershell
+# Navigate to backend
 cd d:\roxilerAssignment\backend
+
+# Install dependencies
+npm install
 ```
 
-2. Copy sample environment and update credentials:
+Create `.env` file in the `backend` folder with this content:
 
-```powershell
-copy .env.sample .env
-# Edit .env using your editor and set DB_HOST, DB_USER, DB_PASS, JWT_SECRET, PORT
-```
-
-Example `.env` values (do NOT use these in production):
-
-```
+```env
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=store_ratings
 DB_USER=root
-DB_PASS=your_db_password
-JWT_SECRET=change_this_to_a_secure_random_value
+DB_PASS=
+JWT_SECRET=your_secret_key_change_in_production
 PORT=4000
+NODE_ENV=development
 ```
 
-3. Install dependencies and start the server (dev mode):
+⚠️ Replace:
+- `DB_USER` = your MySQL username
+- `DB_PASS` = your MySQL password  
+- `JWT_SECRET` = any random string (change in production)
 
-```powershell
-npm install
-npm run dev
-```
-
-If `npm install` shows vulnerabilities (audit warnings), run the audit fix commands below to attempt automatic remediation:
-
-```powershell
-# Try safe fixes first
-npm audit fix
-
-# If still unresolved (may upgrade packages with breaking changes), run:
-npm audit fix --force
-```
-
-Also ensure your npm is up-to-date; older npm versions often surface deprecated/transitive warnings. Update npm globally:
-
-```powershell
-npm install -g npm@latest
-```
-
-- The server will attempt to `sequelize.sync()` and start on the configured `PORT` (default 4000).
-- API base: `http://localhost:4000/api`
-
-### Create an initial ADMIN user
-
-Because admin-only endpoints require an ADMIN user, create one by inserting a user row directly into the database.
-
-1. Generate a bcrypt hash (run inside the `backend` folder where `bcrypt` is installed):
-
-```powershell
-# Replace "StrongAdmin1!" with your chosen admin password
-node -e "console.log(require('bcrypt').hashSync('StrongAdmin1!', 10))"
-```
-
-This prints a bcrypt hash string. Copy it.
-
-2. Insert admin user into MySQL (adjust email, name, address):
-
-```sql
-INSERT INTO users (name, email, address, password_hash, role)
-VALUES ('System Administrator Sample Account', 'admin@example.com', 'Admin Address', '<PASTE_HASH_HERE>', 'ADMIN');
-```
-
-- Ensure `name` meets the validation (20–60 characters).
-
-## 5) Frontend setup
-
-1. Open a new terminal and go to the frontend folder:
-
-```powershell
-cd d:\roxilerAssignment\frontend
-```
-
-2. Copy sample env and install dependencies:
-
-```powershell
-copy .env.sample .env
-npm install
-```
-
-3. Start the frontend dev server:
+**Start backend server:**
 
 ```powershell
 npm run dev
 ```
 
-- Vite will serve the app (usually on `http://localhost:5173`). The frontend expects the API at the URL in `REACT_APP_API_URL` (default `http://localhost:4000/api`).
+✅ **Expected output:**
+```
+DB synced
+Server running on port 4000
+```
 
-## 6) Quick usage flow
-
-- Open the frontend in your browser.
-- Login as the admin you created (`admin@example.com` / `StrongAdmin1!`).
-- As ADMIN you can create users and stores via the Admin dashboard (the frontend exposes simple views; API endpoints exist for full functionality).
-- Signup as a normal user via the Signup page to test rating flows.
-- Use a STORE_OWNER account (created by an admin) to login and view the owner dashboard.
-
-## 7) API endpoints (summary)
-
-- `POST /api/auth/signup` — signup (USER)
-- `POST /api/auth/login` — login (returns JWT and role)
-- `POST /api/auth/update-password` — password change (auth required)
-- `GET /api/admin/dashboard` — requires ADMIN
-- `POST /api/admin/users` — create users (ADMIN)
-- `POST /api/admin/stores` — create store (ADMIN)
-- `GET /api/stores` — list/search stores (public)
-- `POST /api/stores/:id/rating` — submit rating (USER)
-- `PUT /api/stores/:id/rating` — update rating (USER)
-- `GET /api/owner/dashboard` — requires STORE_OWNER
-
-## 8) Notes & debugging
-
-- Backend logs to console. If DB connection fails, check `.env` credentials and the MySQL service.
-- If tables do not exist, either import `sql/schema.sql` or allow the app to `sequelize.sync()` on startup.
-- To create additional seeded data, use SQL INSERTs or implement seed scripts.
+Keep this terminal open. Backend is now running! 🚀
 
 ---
 
-If you want, I can now add a small `scripts/seed-admin.js` helper to automate the admin creation (generates hash and inserts into DB). Would you like that?  
+## Step 3: Setup Frontend
 
-*** End of Quickstart ***
+**Terminal 2 (New terminal, keep running)**
+
+```powershell
+# Navigate to frontend
+cd d:\roxilerAssignment\frontend
+
+# Install dependencies
+npm install
+```
+
+Create `.env` file in the `frontend` folder:
+
+```env
+VITE_API_URL=http://localhost:4000/api
+```
+
+**Start frontend development server:**
+
+```powershell
+npm run dev
+```
+
+✅ **Expected output:**
+```
+VITE v5.1.0  ready in XXX ms
+  ➜  Local:   http://localhost:5173/
+```
+
+✅ Frontend is now running!
+
+---
+
+## Step 4: Open Application
+
+Open your browser and go to:
+
+```
+http://localhost:5173
+```
+
+You should see the application with **Login** and **Signup** buttons.
+
+---
+
+## Step 5: Create Admin User (First Time Only)
+
+To access the admin dashboard, you need an ADMIN account.
+
+**In Terminal 1 (where backend is running), stop it with Ctrl+C and run:**
+
+```powershell
+cd d:\roxilerAssignment\backend
+node -e "console.log(require('bcrypt').hashSync('Admin@123', 10))"
+```
+
+This outputs a bcrypt hash. **Copy it.**
+
+**Then insert the admin user into MySQL:**
+
+```powershell
+# Open MySQL
+mysql -u root -p store_ratings
+```
+
+**Run in MySQL:**
+
+```sql
+INSERT INTO users (name, email, address, password_hash, role) 
+VALUES ('System Administrator', 'admin@example.com', '123 Admin Street', '<PASTE_HASH_HERE>', 'ADMIN');
+```
+
+Replace `<PASTE_HASH_HERE>` with the hash from step above.
+
+**Restart backend:**
+
+```powershell
+npm run dev
+```
+
+---
+
+## Step 6: Login & Test
+
+1. **Go to** http://localhost:5173
+2. **Click Login**
+3. **Enter:**
+   - Email: `admin@example.com`
+   - Password: `Admin@123`
+4. **Click Login**
+
+✅ You should now see the **Admin Dashboard**!
+
+---
+
+## What to Do Now
+
+### As Admin:
+- **Create Users** → Click "Create User" button
+- **Create Stores** → Click "Create Store" button
+- **View Statistics** → See total users, stores, ratings at top
+
+### Test Regular User Flow:
+1. **Logout** (top right menu)
+2. **Go to Signup** → Create a regular USER account
+3. **Login** with new account
+4. **View Stores** → See stores and submit ratings (1-5 stars)
+
+### Test Store Owner Flow:
+1. As admin, create a user with role "STORE_OWNER"
+2. Logout and login with that STORE_OWNER account
+3. You'll see the **Owner Dashboard** showing ratings received
+
+---
+
+## Terminal Management
+
+**You should have 2 terminals running:**
+
+| Terminal | What's Running | Command |
+|----------|---|---|
+| Terminal 1 | Backend Server | `npm run dev` (in `backend/` folder) |
+| Terminal 2 | Frontend Server | `npm run dev` (in `frontend/` folder) |
+
+**To stop:** Press `Ctrl+C` in each terminal
+
+**To restart:** Run commands again
+
+---
+
+## Quick Reference
+
+| What You Want | URL |
+|---|---|
+| Application | http://localhost:5173 |
+| API Base | http://localhost:4000/api |
+| Admin Credentials | Email: `admin@example.com` / Password: `Admin@123` |
+
+---
+
+## Troubleshooting Quick Fixes
+
+### "Cannot find module" in backend
+```powershell
+cd backend
+npm install
+```
+
+### "Port 4000 already in use"
+Change PORT in `backend/.env` to `4001` and update VITE_API_URL in `frontend/.env`
+
+### "Cannot connect to database"
+```powershell
+# Check .env credentials match your MySQL setup
+# Restart MySQL server
+# Verify database exists: mysql -u root -p -e "SHOW DATABASES;"
+```
+
+### "No tables exist"
+```powershell
+# Re-run database setup
+mysql -u root -p < .\sql\schema.sql
+```
+
+### "Cannot login"
+- Verify admin user was created (Step 5)
+- Check database: `mysql -u root -p store_ratings -e "SELECT * FROM users;"`
+- Clear browser cache (Ctrl+Shift+Delete)
+
+---
+
+## Next Steps
+
+- Read **README.md** for detailed documentation
+- Explore API endpoints in README.md
+- Create test data as you play with the app
+- Check form validations (20-60 char names, 8-16 char passwords, etc.)
+
+---
+
+## Done! 🎉
+
+Your application is now running with:
+- ✅ Database setup
+- ✅ Backend API running on port 4000
+- ✅ Frontend running on port 5173
+- ✅ Admin user created and ready to login
+
+Enjoy building with the Store Ratings App!
