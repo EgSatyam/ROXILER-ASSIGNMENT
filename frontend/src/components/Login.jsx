@@ -28,7 +28,7 @@ export default function Login({ onLogin }){
           <p className="text-xs text-gray-500 mt-1">8-16 characters, at least 1 uppercase letter & 1 special character</p>
         </div>
         <div className="flex justify-end">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Login</button>
+          <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Login</button>
         </div>
       </form>
     </div>

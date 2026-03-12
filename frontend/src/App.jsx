@@ -34,21 +34,21 @@ export default function App(){
   }, [showUserProfile]);
   const logout = ()=>{ localStorage.removeItem('token'); localStorage.removeItem('role'); localStorage.removeItem('name'); localStorage.removeItem('email'); setRole(null); navigate('/login'); };
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <header className="bg-blue-600 text-white shadow">
+    <div className="min-h-screen bg-gray-400 text-white-900">
+      <header className="bg-green-600 text-white shadow">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <nav className="flex items-center gap-4">
-            {role !== 'ADMIN' && role !== 'STORE_OWNER' && <Link to="/" className="text-white hover:text-blue-200 font-medium">Home</Link>}
-            {role === 'ADMIN' && <Link to="/admin" className="text-white hover:text-blue-200 font-medium">Admin Dashboard</Link>}
-            {role === 'STORE_OWNER' && <Link to="/owner" className="text-white hover:text-blue-200 font-medium">Owner Dashboard</Link>}
+            {role !== 'ADMIN' && role !== 'STORE_OWNER' && <Link to="/" className="text-white hover:text-green-200 font-medium">Home</Link>}
+            {role === 'ADMIN' && <Link to="/admin" className="text-white hover:text-green-200 font-medium">Admin Dashboard</Link>}
+            {role === 'STORE_OWNER' && <Link to="/owner" className="text-white hover:text-green-200 font-medium">Owner Dashboard</Link>}
           </nav>
           <div className="flex items-center gap-4">
-            {!role && <Link to="/login" className="text-white hover:text-blue-200 hover:underline">Login</Link>}
-            {!role && <Link to="/signup" className="text-white hover:text-blue-200 hover:underline">Signup</Link>}
-            {role && <Link to="/update-password" className="text-white hover:text-blue-200 hover:underline">Update Password</Link>}
+            {!role && <Link to="/login" className="text-white hover:text-green-200 hover:underline">Login</Link>}
+            {!role && <Link to="/signup" className="text-white hover:text-green-200 hover:underline">Signup</Link>}
+            {role && <Link to="/update-password" className="text-white hover:text-green-200 hover:underline">Update Password</Link>}
             {role && (
               <div className="relative user-profile-menu">
-                <button onClick={() => setShowUserProfile(!showUserProfile)} className="flex items-center justify-center bg-white text-blue-600 rounded-full w-10 h-10 hover:bg-gray-100">
+                <button onClick={() => setShowUserProfile(!showUserProfile)} className="flex items-center justify-center bg-white text-green-600 rounded-full w-10 h-10 hover:bg-gray-100">
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>

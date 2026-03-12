@@ -72,7 +72,7 @@ export default function UserStores(){
         <div className="flex items-center gap-2">
           <input placeholder="Search name" value={storeFilters.name} onChange={e=>setStoreFilters({...storeFilters,name:e.target.value})} className="border px-3 py-2 rounded" />
           <input placeholder="Search address" value={storeFilters.address} onChange={e=>setStoreFilters({...storeFilters,address:e.target.value})} className="border px-3 py-2 rounded" />
-          <button onClick={()=>load()} className="bg-blue-600 text-white px-3 py-2 rounded">Search</button>
+          <button onClick={()=>load()} className="bg-green-600 text-white px-3 py-2 rounded">Search</button>
         </div>
       </div>
 

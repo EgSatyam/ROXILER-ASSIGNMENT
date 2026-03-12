@@ -59,8 +59,8 @@ export default function AdminDashboard(){
       </div>
       {stats && <div className="bg-white p-4 rounded shadow">Total Users: <span className="font-semibold">{stats.totalUsers}</span> | Total Stores: <span className="font-semibold">{stats.totalStores}</span> | Total Ratings: <span className="font-semibold">{stats.totalRatings}</span></div>}
       <div className="flex gap-4">
-        <button onClick={()=>setShowCreateUser(true)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Create User</button>
-        <button onClick={()=>setShowCreateStore(true)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Create Store</button>
+        <button onClick={()=>setShowCreateUser(true)} className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded">Create User</button>
+        <button onClick={()=>setShowCreateStore(true)} className="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded">Create Store</button>
       </div>
       {showCreateUser && (
         <div className="bg-white p-4 rounded shadow">
@@ -119,7 +119,7 @@ export default function AdminDashboard(){
                 <option value="ASC">Ascending</option>
                 <option value="DESC">Descending</option>
               </select>
-              <button onClick={loadStores} className="bg-blue-600 text-white px-3 py-2 rounded">Filter</button>
+              <button onClick={loadStores} className="bg-green-600 text-white px-3 py-2 rounded">Filter</button>
             </div>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function AdminDashboard(){
                 <option value="ASC">Ascending</option>
                 <option value="DESC">Descending</option>
               </select>
-              <button onClick={loadUsers} className="bg-blue-600 text-white px-3 py-2 rounded">Filter</button>
+              <button onClick={loadUsers} className="bg-green-600 text-white px-3 py-2 rounded">Filter</button>
             </div>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function AdminDashboard(){
                   <td className="px-4 py-2">{u.email}</td>
                   <td className="px-4 py-2">{u.address}</td>
                   <td className="px-4 py-2">{u.role}</td>
-                  <td className="px-4 py-2"><button onClick={async () => { const details = await api.admin.userDetails(u.id); alert(JSON.stringify(details, null, 2)); }} className="bg-blue-600 text-white px-2 py-1 rounded text-sm">Details</button></td>
+                  <td className="px-4 py-2"><button onClick={async () => { const details = await api.admin.userDetails(u.id); alert(JSON.stringify(details, null, 2)); }} className="bg-green-600 text-white px-2 py-1 rounded text-sm">Details</button></td>
                 </tr>
               ))}
             </tbody>

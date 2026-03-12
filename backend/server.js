@@ -21,9 +21,9 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
 
-sequelize.sync().then(() => {
-  console.log('DB synced');
+sequelize.authenticate().then(() => {
+  console.log('DB connected');
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }).catch(err => {
-  console.error('Failed to sync DB', err);
+  console.error('Failed to connect to DB', err);
 });

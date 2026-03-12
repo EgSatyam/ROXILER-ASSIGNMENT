@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     user_id: { type: DataTypes.INTEGER, allowNull: false },
     store_id: { type: DataTypes.INTEGER, allowNull: false },
-    rating: { type: DataTypes.TINYINT, allowNull: false },
+    rating: { type: DataTypes.SMALLINT, allowNull: false },
     created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
   }, {
