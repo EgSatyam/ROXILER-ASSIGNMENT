@@ -72,7 +72,7 @@
 - **Runtime**: Node.js (v16+)
 - **Web Framework**: Express.js (v4.18.2)
 - **ORM**: Sequelize (v6.32.1)
-- **Database**: MySQL 2 (v3.2.0)
+- **Database**: PostgreSQL 2 (v3.2.0)
 - **Authentication**: JWT (jsonwebtoken v9.0.0)
 - **Password Hashing**: Bcrypt (v5.1.0)
 - **Input Validation**: Express-Validator (v6.15.0)
@@ -89,9 +89,9 @@
 - **Vite Plugin**: @vitejs/plugin-react (v4.2.1)
 
 ### Database
-- **Engine**: MySQL
+- **Engine**: PostgreSQL
 - **Schema**: Defined in `sql/schema.sql`
-- **Version**: MySQL 5.7+ or 8.0+
+
 
 ---
 
@@ -151,7 +151,7 @@ roxilerAssignment/
 │   └── index.html                    # HTML entry point
 │
 ├── sql/
-│   └── schema.sql                    # MySQL database schema and tables
+│   └── schema.sql                    # PostgreSQL database schema and tables
 │
 ├── README.md                         # This file
 └── quickstart.md                     # Quick start guide
@@ -162,7 +162,7 @@ roxilerAssignment/
 
 **Backend Files:**
 - `server.js`: Main entry point, initializes Express, sets up routes, syncs Sequelize models
-- `config/database.js`: Sequelize configuration with MySQL connection details
+- `config/database.js`: Sequelize configuration with PostgreSQL connection details
 - `models/index.js`: Initializes and exports all Sequelize models (User, Store, Rating)
 - `controllers/`: Contains business logic for each feature (auth, admin, stores, ratings)
 - `middlewares/`: Contains JWT verification, role checking, and error handling
@@ -182,7 +182,7 @@ roxilerAssignment/
 - **Operating System**: Windows, macOS, or Linux
 - **Node.js**: Version 16.0.0 or higher
 - **npm**: Version 7.0.0 or higher (comes with Node.js)
-- **MySQL Server**: Version 5.7 or 8.0+
+- **PostgreSQL Server**: 
 - **RAM**: Minimum 2GB
 - **Disk Space**: Minimum 500MB
 
@@ -194,8 +194,8 @@ node --version          # Should be v16.0.0 or higher
 # Check npm version
 npm --version           # Should be 7.0.0 or higher
 
-# Check MySQL version
-mysql --version         # Should be 5.7 or 8.0+
+# Check PostgreSQL version
+PostgreSQL --version         # Should be 5.7 or 8.0+
 ```
 
 ---
@@ -219,7 +219,7 @@ npm install
 This installs the following packages:
 - Express.js - Web framework
 - Sequelize - ORM
-- MySQL2 - Database driver
+- PostgreSQL - Database driver
 - JWT - Token-based authentication
 - Bcrypt - Password hashing
 - Express-Validator - Input validation
@@ -303,13 +303,13 @@ Expected output will show:
 # Option A: Automatic (if backend is configured)
 # The backend will automatically create tables via Sequelize sync
 
-# Option B: Manual MySQL
-mysql -u root -p < sql/schema.sql
+# Option B: Manual PostgreSQL
+PostgreSQL -u root -p < sql/schema.sql
 ```
 
 #### 4.2 Create Initial Admin User (if needed)
 You can either:
-1. Insert directly in MySQL:
+1. Insert directly in PostgreSQL:
 ```sql
 -- First, generate a bcrypt hash of your password
 -- For example, bcrypt("Admin@123") = $2b$10$...
@@ -326,7 +326,7 @@ VALUES ('System Administrator', 'admin@example.com', 'Admin Office', '$2b$10$...
 ### Backend `.env` Details
 
 ```bash
-# MySQL Database Connection
+# PostgreSQL Database Connection
 DB_HOST=localhost              # Database host (default: localhost)
 DB_PORT=3306                   # Database port (default: 3306)
 DB_USER=root                   # Database user
@@ -365,7 +365,7 @@ npm run dev
 #### Manual Creation
 ```bash
 # Run the SQL schema manually
-mysql -u root -p store_ratings < sql/schema.sql
+PostgreSQL -u root -p store_ratings < sql/schema.sql
 ```
 
 ### Database Initialization Script
@@ -1094,10 +1094,10 @@ This creates an optimized build in `frontend/dist/` directory.
 **Error**: `Connection refused`
 ```
 Solution:
-1. Ensure MySQL server is running
+1. Ensure PostgreSQL server is running
 2. Check DB_HOST, DB_PORT, DB_USER, DB_PASS in .env
 3. Verify database exists: CREATE DATABASE IF NOT EXISTS store_ratings;
-4. Check MySQL port (default 3306)
+4. Check PostgreSQL port (default 3306)
 ```
 
 ### Port Already in Use
@@ -1161,7 +1161,7 @@ Solution:
 Solution:
 1. Delete existing database: DROP DATABASE store_ratings;
 2. Create fresh database: CREATE DATABASE store_ratings;
-3. Run schema: mysql -u root -p store_ratings < sql/schema.sql
+3. Run schema: PostgreSQL -u root -p store_ratings < sql/schema.sql
 4. Restart backend: npm run dev
 ```
 
@@ -1195,7 +1195,7 @@ For issues or questions:
 2. Review the quickstart.md file
 3. Examine error logs in terminal
 4. Check browser console for frontend errors
-5. Use MySQL Workbench to inspect database
+5. Use PostgreSQL Workbench to inspect database
 
 ---
 

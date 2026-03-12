@@ -1,7 +1,7 @@
 // require('dotenv').config();
 // const fs = require('fs');
 // const path = require('path');
-// const mysql = require('mysql2/promise');
+// const PostgreSQL = require('PostgreSQL2/promise');
 
 // async function main(){
 //   const DB_HOST = process.env.DB_HOST || 'localhost';
@@ -18,8 +18,8 @@
 
 //   const sql = fs.readFileSync(sqlPath, 'utf8');
 
-//   console.log('Connecting to MySQL server...');
-//   const conn = await mysql.createConnection({ host: DB_HOST, port: DB_PORT, user: DB_USER, password: DB_PASS, multipleStatements: true });
+//   console.log('Connecting to PostgreSQL server...');
+//   const conn = await PostgreSQL.createConnection({ host: DB_HOST, port: DB_PORT, user: DB_USER, password: DB_PASS, multipleStatements: true });
 //   try{
 //     console.log(`Creating database '${DB_NAME}' if it does not exist...`);
 //     await conn.query(`CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;`);

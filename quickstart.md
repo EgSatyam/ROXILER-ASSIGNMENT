@@ -9,7 +9,7 @@ Get the Store Ratings application up and running in **5 minutes**. Follow these 
 Before starting, ensure you have:
 - **Node.js 16+** → Check: `node --version`
 - **npm 7+** → Check: `npm --version`
-- **MySQL Server** running → Check by opening MySQL client
+- **PostgreSQL Server** running → Check by opening PostgreSQL client
 - Workspace open at: `d:/roxilerAssignment`
 
 If any are missing, install them before proceeding.
@@ -27,15 +27,15 @@ Open **PowerShell** or **Command Prompt** and run:
 cd d:\roxilerAssignment
 
 # Create database and tables
-Get-Content .\sql\schema.sql | mysql -u root -p
+Get-Content .\sql\schema.sql | PostgreSQL -u root -p
 ```
 
-When prompted, enter your MySQL password (leave blank if no password).
+When prompted, enter your PostgreSQL password (leave blank if no password).
 
 **You should see:** Database created or tables exist message. No errors = Success! ✅
 
-**If you prefer manual MySQL client:**
-1. Open MySQL Workbench or MySQL CLI
+**If you prefer manual PostgreSQL client:**
+1. Open PostgreSQL Workbench or PostgreSQL CLI
 2. Run the SQL content from `sql/schema.sql`
 3. Confirm 3 tables exist: `users`, `stores`, `ratings`
 
@@ -67,8 +67,8 @@ NODE_ENV=development
 ```
 
 ⚠️ Replace:
-- `DB_USER` = your MySQL username
-- `DB_PASS` = your MySQL password  
+- `DB_USER` = your PostgreSQL username
+- `DB_PASS` = your PostgreSQL password  
 - `JWT_SECRET` = any random string (change in production)
 
 **Start backend server:**
@@ -146,14 +146,14 @@ node -e "console.log(require('bcrypt').hashSync('Admin@123', 10))"
 
 This outputs a bcrypt hash. **Copy it.**
 
-**Then insert the admin user into MySQL:**
+**Then insert the admin user into PostgreSQL:**
 
 ```powershell
-# Open MySQL
-mysql -u root -p store_ratings
+# Open PostgreSQL
+PostgreSQL -u root -p store_ratings
 ```
 
-**Run in MySQL:**
+**Run in PostgreSQL:**
 
 ```sql
 INSERT INTO users (name, email, address, password_hash, role) 
@@ -241,20 +241,20 @@ Change PORT in `backend/.env` to `4001` and update VITE_API_URL in `frontend/.en
 
 ### "Cannot connect to database"
 ```powershell
-# Check .env credentials match your MySQL setup
-# Restart MySQL server
-# Verify database exists: mysql -u root -p -e "SHOW DATABASES;"
+# Check .env credentials match your PostgreSQL setup
+# Restart PostgreSQL server
+# Verify database exists: PostgreSQL -u root -p -e "SHOW DATABASES;"
 ```
 
 ### "No tables exist"
 ```powershell
 # Re-run database setup
-mysql -u root -p < .\sql\schema.sql
+PostgreSQL -u root -p < .\sql\schema.sql
 ```
 
 ### "Cannot login"
 - Verify admin user was created (Step 5)
-- Check database: `mysql -u root -p store_ratings -e "SELECT * FROM users;"`
+- Check database: `PostgreSQL -u root -p store_ratings -e "SELECT * FROM users;"`
 - Clear browser cache (Ctrl+Shift+Delete)
 
 ---
